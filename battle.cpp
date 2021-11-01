@@ -6858,11 +6858,15 @@ int64 battle_calc_return_damage(struct block_list* bl, struct block_list *src, i
 			rdamage = 0;
       	  		return 0;
 		}
-
-
 		else if ( (skill_get_inf2(skill_id)&INF2_TRAP || !status_reflect) && sd && sd->bonus.short_weapon_damage_return ) {
+			
+			if( map_getmapflag(sd->bl.m, MF_PVP) ) {
+			rdamage += damage * sd->bonus.short_weapon_damage_return / 200;
+			rdamage = i64max(rdamage,1);			
+			else
 			rdamage += damage * sd->bonus.short_weapon_damage_return / 100;
 			rdamage = i64max(rdamage,1);
+			}
 		} else if( status_reflect && sc && sc->count ) {
 			if( sc->data[SC_REFLECTSHIELD] ) {
 				struct status_change_entry *sce_d;
